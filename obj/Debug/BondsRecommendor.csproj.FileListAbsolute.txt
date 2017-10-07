@@ -1,8 +1,0 @@
-C:\programming\BondsRecommendor\obj\Debug\BondsRecommendor.Properties.Resources.resources
-C:\programming\BondsRecommendor\obj\Debug\BondsRecommendor.csproj.GenerateResource.Cache
-C:\programming\BondsRecommendor\bin\Debug\BondsRecommendor.exe.config
-C:\programming\BondsRecommendor\bin\Debug\BondsRecommendor.exe
-C:\programming\BondsRecommendor\bin\Debug\BondsRecommendor.pdb
-C:\programming\BondsRecommendor\obj\Debug\BondsRecommendor.exe
-C:\programming\BondsRecommendor\obj\Debug\BondsRecommendor.pdb
-C:\programming\BondsRecommendor\obj\Debug\FrontEnd.Form1.resources
