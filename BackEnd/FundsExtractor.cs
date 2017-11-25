@@ -30,25 +30,25 @@ namespace BackEnd
 
             NameValueCollection NVCollection = new NameValueCollection()
                 #region Funds_10_percent_post_params
-            {
-                { "Field1", "109" },
-                { "Field2", "134" },
-                { "Field3", "134" },
-                { "Field4", "הכל" },
-                { "Field5", "" },
-                { "Field6", "" },
-                { "Field7", "0" },
-                { "Field1Ind", "2" },
-                { "Field2Ind", "4" },
-                { "Field3Ind", "1" },
-                { "Field4Ind", "1" },
-                { "Field5Ind", "1" },
-                { "Field6Ind", "1" },
-                { "Field7Ind", "1" },
-                {"Freetext", "" },
-                {"from", "2017-10-07" },
-                {"to", "2017-10-07" }
-            };
+                {
+                    { "Field1", "109" },
+                    { "Field2", "134" },
+                    { "Field3", "134" },
+                    { "Field4", "הכל" },
+                    { "Field5", "" },
+                    { "Field6", "" },
+                    { "Field7", "0" },
+                    { "Field1Ind", "2" },
+                    { "Field2Ind", "4" },
+                    { "Field3Ind", "1" },
+                    { "Field4Ind", "1" },
+                    { "Field5Ind", "1" },
+                    { "Field6Ind", "1" },
+                    { "Field7Ind", "1" },
+                    {"Freetext", "" },
+                    {"from", "2017-10-07" },
+                    {"to", "2017-10-07" }
+                };
                 #endregion
 
             //download funds data in a different thread
@@ -57,9 +57,9 @@ namespace BackEnd
 
         private void AskForDataAndWait(NameValueCollection PostRequestParams)
         {
-            string[] WebPageData = m_WebController.PerformPostRequest("www.bizportal.co.il/mutualfunds/search", PostRequestParams);
+            string[] WebPageData = m_WebController.PerformPostRequest("http://www.bizportal.co.il/mutualfunds/search", PostRequestParams);
 
-            List<SecurityProperties> FundsList = new List<SecurityProperties>();
+            List<Fund> FundsList = new List<Fund>();
 
             foreach (string curLine in WebPageData)
             {
@@ -69,7 +69,7 @@ namespace BackEnd
                     string[] FundData = DelimitedData.Split('\'');
                     string NumberOfFund = FundData[0];
                     string NameOfFund = FundData[2];
-                    FundsList.Add(new SecurityProperties(SecurityType.Fund, NameOfFund, Convert.ToInt32(NumberOfFund)));
+                    FundsList.Add(new Fund(NameOfFund, Convert.ToInt32(NumberOfFund)));
                 }
             }
         }

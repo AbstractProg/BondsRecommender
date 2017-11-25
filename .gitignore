@@ -1,0 +1,14 @@
+*.suo
+*.dll
+*.cache
+*.pdb
+*.xml
+*.exe
+*.json
+obj/Debug/BondsRecommendor.csproj.FileListAbsolute.txt
+*.resources
+*.md
+*.ps1
+*.sqlite
+Debug/
+Release/

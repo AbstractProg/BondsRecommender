@@ -18,12 +18,14 @@ namespace BondsRecommendor
         static void Main()
         {
             //initialize the messages from backend
-            DataDownloadStartedMsg DDLStartMsg = new DataDownloadStartedMsg();
+            BridgeMsg.DataDownloadStartedMsg DDLStartMsg = new BridgeMsg.DataDownloadStartedMsg();
+            BridgeMsg.DownloadProgressMsg DownloadProgMsg = new BridgeMsg.DownloadProgressMsg();
+            BridgeMsg.ListOfBondsMsg BondsListMsg = new BridgeMsg.ListOfBondsMsg();
 
             //initialize back end components
             WebController WebControl = new WebController();
             FundsExtractor FundsExtract = new FundsExtractor(WebControl, DDLStartMsg.LaunchEvent);
-            BondsUpdater BondsUpdate = new BondsUpdater();
+            BondsUpdater BondsUpdate = new BondsUpdater(WebControl, DDLStartMsg, DownloadProgMsg, BondsListMsg);
 
             //initialize the frontend to backend bridge
             BridgeToBackEnd Bridge = new BridgeToBackEnd(FundsExtract, BondsUpdate);
@@ -31,7 +33,7 @@ namespace BondsRecommendor
             //initialize and start the front end
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(Bridge, DDLStartMsg));
+            Application.Run(new Form1(Bridge, DDLStartMsg, DownloadProgMsg, BondsListMsg));
         }
     }
 }

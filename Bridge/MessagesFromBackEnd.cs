@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bridge
+namespace BridgeMsg
 {
+    public delegate void DataDownloadStartedDlgt();
     public class DataDownloadStartedMsg
     {
-        public delegate void EventRaiser();
-        public event EventRaiser OnDownloadStarted;
+        public event DataDownloadStartedDlgt OnDownloadStarted;
         
         public void LaunchEvent()
         {
@@ -17,14 +17,25 @@ namespace Bridge
         }
     }
 
-    /*public class ListOfFundsMsg
+    public delegate void ListOfBondsDlgt(List<GeneralTypes.Bond> bondList);
+    public class ListOfBondsMsg
     {
-        public delegate void EventRaiser(String WebPageData);
-        public event EventRaiser onDownoladFinished;
-
-        public void LaunchEvent(string WebPageData)
+        public event ListOfBondsDlgt OnListOfBondsUpdated;
+        
+        public void LaunchEvent(List<GeneralTypes.Bond> listToPublish)
         {
-            onDownoladFinished?.Invoke(WebPageData);
+            OnListOfBondsUpdated?.Invoke(listToPublish);
         }
-    }*/
+    }
+
+    public delegate void UpdateProgressDlgt(int percentage, string BondName);
+    public class DownloadProgressMsg
+    {
+        public event UpdateProgressDlgt OnDownloadProgress;
+
+        public void LaunchEvent(int percentage, string bondName)
+        {
+            OnDownloadProgress?.Invoke(percentage, bondName);
+        }
+    }
 }
