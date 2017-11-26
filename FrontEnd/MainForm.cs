@@ -79,15 +79,17 @@ namespace FrontEnd
                 curBondLabel.Visible = false;
 
                 ResultsGridView.Visible = true;
-                ResultsGridView.ColumnCount = 4;
+                ResultsGridView.ColumnCount = 5;
                 ResultsGridView.Columns[0].Name = "שם";
                 ResultsGridView.Columns[1].Name = "מספר";
                 ResultsGridView.Columns[2].Name = "דירוג";
-                ResultsGridView.Columns[3].Name = "תשואה נטו";
+                ResultsGridView.Columns[3].Name = "מח\"מ";
+                ResultsGridView.Columns[4].Name = "תשואה נטו";
 
                 foreach (GeneralTypes.Bond curBond in bondList)
                 {
-                    string[] row = new string[] { curBond.Name, curBond.SerialNumber.ToString(), curBond.QualityRating, curBond.NetYield.ToString()};
+                    string[] row = new string[] { curBond.Name, curBond.SerialNumber.ToString(), curBond.QualityRating, curBond.Maham.ToString(),
+                        curBond.NetYield.ToString()};
                     ResultsGridView.Rows.Add(row);
                 }
             });

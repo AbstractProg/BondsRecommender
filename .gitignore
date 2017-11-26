@@ -12,3 +12,4 @@ obj/Debug/BondsRecommendor.csproj.FileListAbsolute.txt
 *.sqlite
 Debug/
 Release/
+.vs/

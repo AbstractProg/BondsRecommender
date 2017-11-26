@@ -27,10 +27,11 @@ namespace GeneralTypes
 
     public class Bond : Security
     {
-        public Bond(string NameOfSecurity, int NumberOfSecurity, string qualityRating)
+        public Bond(string NameOfSecurity, int NumberOfSecurity, string qualityRating, double maham)
             : base(NameOfSecurity, NumberOfSecurity)
         {
             QualityRating = qualityRating;
+            Maham = maham;
         }
 
         public Bond(Bond copyFrom, double netYield)
@@ -38,10 +39,12 @@ namespace GeneralTypes
         {
             QualityRating = copyFrom.QualityRating;
             NetYield = netYield;
+            Maham = copyFrom.Maham;
         }
 
         public string QualityRating { get; }
         public double NetYield { get;}
+        public double Maham { get; }
     }
 
     class Fund : Security

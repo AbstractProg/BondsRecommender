@@ -14,6 +14,16 @@ namespace BackEnd
         const int NumDigitsInBondSerial = 7;
         const int NumOfRowsForBond = 11;
 
+        const int NameIDInFile = 1;
+        const int MahamIDInFile = 6;
+        const int Quality1IDInFile = 8;
+        const int Quality2IDInFile = 9;
+        const int NumberIDInFile = 10;
+
+        List<string> m_AllQualityValues;
+        ConfigurationManager m_cfgMgr;
+
+
         class JsonItem
         {
             public string AggregateResults;
@@ -58,12 +68,17 @@ namespace BackEnd
         BridgeMsg.ListOfBondsMsg m_listPublisher;
 
         public BondsUpdater(WebController WebControl,BridgeMsg.DataDownloadStartedMsg dDownloadStartedPublisher,
-            BridgeMsg.DownloadProgressMsg downloadProgressPublisher, BridgeMsg.ListOfBondsMsg listPublisher)
+            BridgeMsg.DownloadProgressMsg downloadProgressPublisher, BridgeMsg.ListOfBondsMsg listPublisher, ConfigurationManager cfgMgr)
         {
             m_WebController = WebControl;
             m_dDownloadStartedPublisher = dDownloadStartedPublisher;
             m_downloadProgressPublisher = downloadProgressPublisher;
             m_listPublisher = listPublisher;
+            m_cfgMgr = cfgMgr;
+
+            m_AllQualityValues = new List<string> {
+                "Aaa", "Aa1", "Aa2", "Aa3", "A1", "A2", "A3", "Ba1", "Baa1", "Baa2", "Baa3",
+                "AAA", "AA+", "AA", "AA-", "A+", "A", "A-", "BBB+", "BBB", "BBB-", "CC", "CCC", "D"};
         }
 
         public void UpdateBondsData()
@@ -95,53 +110,56 @@ namespace BackEnd
 
             m_dDownloadStartedPublisher.LaunchEvent();
             string[] WebPageData = m_WebController.PerformPostRequest("http://www.bizportal.co.il/bonds/Search/SearchResults_AjaxBinding_Read", PostRequestParams);
-            string[] AllBondNumbersAsStrings = WebPageData[0].Split(new string[] { "ColumnData10" }, StringSplitOptions.None);
+            string[] AllBondNumbersAsStrings = WebPageData[0].Split(new string[] { "ColumnData25" }, StringSplitOptions.None);
             List<int> AllBondNumbers = new List<int>();
-            for (int i = 1; i < AllBondNumbersAsStrings.Length; i++)
+            for (int i = 0; i < AllBondNumbersAsStrings.Length - 1; i++)
             {
                 string bondName, bondQuality;
                 int bondSerialNum;
+                double maham;
 
                 //extract basic properties of the bond
-                ExtractBondData(AllBondNumbersAsStrings[i], out bondName, out bondSerialNum, out bondQuality);
+                ExtractBondData(AllBondNumbersAsStrings[i], out bondName, out bondSerialNum, out maham, out bondQuality);
 
-                AllBonds.Add(new GeneralTypes.Bond(bondName, bondSerialNum, bondQuality));
+                AllBonds.Add(new GeneralTypes.Bond(bondName, bondSerialNum, bondQuality, maham));
             }
 
             return AllBonds;
         }
 
-        private void ExtractBondData(string BondData, out string bondName, out int bondSerialNum, out string bondQuality)
+        private void ExtractBondData(string BondData, out string bondName, out int bondSerialNum, out double maham, out string bondQuality)
         {
-            string[] AllBondData = BondData.Split(new string[] { "\":\"" }, StringSplitOptions.None);
-
-            //extract serial number
-            string bondNum = AllBondData[1].Substring(0, NumDigitsInBondSerial);
-            bondSerialNum = Convert.ToInt32(bondNum);
-
             //extract name
-            string[] bondNameArray = AllBondData[2].Split('"');
-            bondName = bondNameArray[0];
-            if(bondName.Contains("אול"))
-            {
-                int x = 7;
-            }
+            bondName = ExtractSpecificField(BondData, NameIDInFile);
+            
+            //extract serial number
+            string serialNumberAsString = ExtractSpecificField(BondData, NumberIDInFile);
+            bondSerialNum = Convert.ToInt32(serialNumberAsString);
 
-            //extract quality
-            if (AllBondData.Length >= 20)
-            {
-                string[] bondQualityArr = AllBondData[18].Split('"');
-                bondQuality = bondQualityArr[0];
-                if(bondQuality=="")
-                {
-                    bondQualityArr = AllBondData[19].Split('"');
-                    bondQuality = bondQualityArr[0];
-                    if (bondQuality == "")
-                        bondQuality = "Unranked";
-                }
-            }
+            //extract quality type 1
+            string quality1 = ExtractSpecificField(BondData, Quality1IDInFile);
+
+            //extract quality type 2
+            string quality2 = ExtractSpecificField(BondData, Quality2IDInFile);
+
+            //extract maham
+            string mahamAsString = ExtractSpecificField(BondData, MahamIDInFile);
+            maham = Convert.ToDouble(mahamAsString);
+
+            //select the correct quality
+            if (m_AllQualityValues.Contains(quality1))
+                bondQuality = quality1;
+            else if (m_AllQualityValues.Contains(quality2))
+                bondQuality = quality2;
             else
                 bondQuality = "Unranked";
+        }
+
+        private string ExtractSpecificField(string bondData, int fieldNum)
+        {
+            int startIndex = bondData.IndexOf("ColumnData" + fieldNum) + ("ColumnData" + fieldNum).Length + "\":\"".Length;
+            int endIndex = bondData.IndexOf("\",\"ColumnData" + (fieldNum + 1));
+            return bondData.Substring(startIndex, endIndex - startIndex);
         }
 
         private double FindNetYieldOfBond(int bondSerialNum)
@@ -155,29 +173,25 @@ namespace BackEnd
         
         private void FindNetYieldForRankedBonds(List<GeneralTypes.Bond> AllBonds)
         {
-            List<GeneralTypes.Bond> AllRankedBonds = new List<GeneralTypes.Bond>();
+            List<GeneralTypes.Bond> AllDownloadedBonds = new List<GeneralTypes.Bond>();
 
             for(int i=0; i<AllBonds.Count; i++)
             {
                 GeneralTypes.Bond curBond = AllBonds[i];
-                if(curBond.Name.Contains("אול"))
+
+                //For the bonds that are defined in the configuration file, download the net yield and add to list of downloaded bonds
+                if (m_cfgMgr.QualityToDownload.Contains(curBond.QualityRating) &&
+                    m_cfgMgr.MinMahamToDownload < curBond.Maham &&
+                    m_cfgMgr.MaxMahamToDownload > curBond.Maham)
                 {
-                    int x = 7;
-                }
-                //if (curBond.QualityRating == "AAA" || curBond.QualityRating == "AA+" || curBond.QualityRating == "AA" ||
-                //    curBond.QualityRating == "AA-" || curBond.QualityRating == "A+" || curBond.QualityRating == "A" ||
-                //    curBond.QualityRating == "Aaa" || curBond.QualityRating == "Aa2" || curBond.QualityRating == "Aa3" ||
-                //    curBond.QualityRating == "A1" || curBond.QualityRating == "A2")
-                    if (curBond.QualityRating == "A2")
-                {
-                        double bondNetYield = FindNetYieldOfBond(curBond.SerialNumber);
-                    AllRankedBonds.Add(new GeneralTypes.Bond(curBond, bondNetYield));
+                    double bondNetYield = FindNetYieldOfBond(curBond.SerialNumber);
+                    AllDownloadedBonds.Add(new GeneralTypes.Bond(curBond, bondNetYield));
                 }
                 m_downloadProgressPublisher.LaunchEvent(i * 100 / AllBonds.Count, curBond.Name);
             }
 
-            AllRankedBonds = AllRankedBonds.OrderByDescending(o => o.NetYield).ToList();
-            m_listPublisher.LaunchEvent(AllRankedBonds);
+            AllDownloadedBonds = AllDownloadedBonds.OrderByDescending(o => o.NetYield).ToList();
+            m_listPublisher.LaunchEvent(AllDownloadedBonds);
         }
 
     }

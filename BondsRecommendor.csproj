@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackEnd\BondsUpdater.cs" />
+    <Compile Include="BackEnd\ConfigurationManager.cs" />
     <Compile Include="BackEnd\FundsExtractor.cs" />
     <Compile Include="BackEnd\WebController.cs" />
     <Compile Include="Bridge\BridgeToBackEnd.cs" />
