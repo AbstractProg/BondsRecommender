@@ -48,23 +48,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackEnd\BondsTableManager.cs" />
     <Compile Include="BackEnd\BondsUpdater.cs" />
     <Compile Include="BackEnd\ConfigurationManager.cs" />
     <Compile Include="BackEnd\FundsExtractor.cs" />
+    <Compile Include="BackEnd\Portfolio.cs" />
+    <Compile Include="BackEnd\PortfoliosManager.cs" />
     <Compile Include="BackEnd\WebController.cs" />
     <Compile Include="Bridge\BridgeToBackEnd.cs" />
     <Compile Include="Bridge\MessagesFromBackEnd.cs" />
+    <Compile Include="FrontEnd\DownloadSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrontEnd\DownloadSettings.Designer.cs">
+      <DependentUpon>DownloadSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrontEnd\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrontEnd\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrontEnd\OpenNewPortfolio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrontEnd\OpenNewPortfolio.Designer.cs">
+      <DependentUpon>OpenNewPortfolio.cs</DependentUpon>
+    </Compile>
     <Compile Include="GeneralTypes\GeneralTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrontEnd\DownloadSettings.resx">
+      <DependentUpon>DownloadSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrontEnd\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontEnd\OpenNewPortfolio.resx">
+      <DependentUpon>OpenNewPortfolio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

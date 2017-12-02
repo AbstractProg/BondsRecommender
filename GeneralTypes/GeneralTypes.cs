@@ -7,11 +7,21 @@ using System.Threading.Tasks;
 
 namespace GeneralTypes
 {
-    enum SecurityType
+    public class GeneralConsts
     {
-        Fund,
-        Bond
+        public const string PORTFOLIO_FILE_EXTENSION = ".spf";
     }
+
+    public enum IndexType
+    {
+        Shekel,
+        VaryingInterest,
+        Madad,
+        Dollar,
+        Fixed,
+        IrrelevantSecurity
+    }
+    
 
     public class Security
     {
@@ -27,11 +37,12 @@ namespace GeneralTypes
 
     public class Bond : Security
     {
-        public Bond(string NameOfSecurity, int NumberOfSecurity, string qualityRating, double maham)
+        public Bond(string NameOfSecurity, int NumberOfSecurity, string qualityRating, double maham, IndexType index)
             : base(NameOfSecurity, NumberOfSecurity)
         {
             QualityRating = qualityRating;
             Maham = maham;
+            Index = index;
         }
 
         public Bond(Bond copyFrom, double netYield)
@@ -45,6 +56,7 @@ namespace GeneralTypes
         public string QualityRating { get; }
         public double NetYield { get;}
         public double Maham { get; }
+        public IndexType Index { get; }
     }
 
     class Fund : Security

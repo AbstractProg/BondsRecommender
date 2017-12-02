@@ -26,10 +26,12 @@ namespace BondsRecommendor
             ConfigurationManager ConfigurationMgr = new ConfigurationManager();
             WebController WebControl = new WebController();
             FundsExtractor FundsExtract = new FundsExtractor(WebControl, DDLStartMsg.LaunchEvent);
-            BondsUpdater BondsUpdate = new BondsUpdater(WebControl, DDLStartMsg, DownloadProgMsg, BondsListMsg, ConfigurationMgr);
+            BondsTableManager BondsTableMgr = new BondsTableManager();
+            BondsUpdater BondsUpdate = new BondsUpdater(WebControl, BondsTableMgr, DDLStartMsg, DownloadProgMsg, BondsListMsg, ConfigurationMgr);
+            PortfoliosManager PFMgr = new PortfoliosManager(BondsTableMgr);
 
             //initialize the frontend to backend bridge
-            BridgeToBackEnd Bridge = new BridgeToBackEnd(FundsExtract, BondsUpdate);
+            BridgeToBackEnd Bridge = new BridgeToBackEnd(FundsExtract, BondsUpdate, ConfigurationMgr, BondsTableMgr, PFMgr);
 
             //initialize and start the front end
             Application.EnableVisualStyles();
