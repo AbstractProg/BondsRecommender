@@ -631,6 +631,7 @@
          this.Controls.Add(this.panel1);
          this.Name = "DownloadSettingsDlg";
          this.Text = "DownloadSettings";
+         this.Load += new System.EventHandler(this.DownloadSettingsDlg_Load);
          this.panel1.ResumeLayout(false);
          this.panel1.PerformLayout();
          this.groupBox2.ResumeLayout(false);

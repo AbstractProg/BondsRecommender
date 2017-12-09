@@ -36,6 +36,12 @@
          this.tabControl1 = new System.Windows.Forms.TabControl();
          this.tabPage1 = new System.Windows.Forms.TabPage();
          this.tabPage2 = new System.Windows.Forms.TabPage();
+         this.panel2 = new System.Windows.Forms.Panel();
+         this.holdingsDataGridView = new System.Windows.Forms.DataGridView();
+         this.panel1 = new System.Windows.Forms.Panel();
+         this.cashLabel = new System.Windows.Forms.Label();
+         this.label2 = new System.Windows.Forms.Label();
+         this.label3 = new System.Windows.Forms.Label();
          this.menuStrip1 = new System.Windows.Forms.MenuStrip();
          this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.עדכןנתוניםToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,20 +49,18 @@
          this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.portflioComboBox = new System.Windows.Forms.ComboBox();
          this.label1 = new System.Windows.Forms.Label();
-         this.label2 = new System.Windows.Forms.Label();
-         this.label3 = new System.Windows.Forms.Label();
-         this.holdingsDataGridView = new System.Windows.Forms.DataGridView();
-         this.panel1 = new System.Windows.Forms.Panel();
-         this.cashLabel = new System.Windows.Forms.Label();
-         this.panel2 = new System.Windows.Forms.Panel();
+         this.buyBondButton = new System.Windows.Forms.Button();
+         this.sellBondButton = new System.Windows.Forms.Button();
+         this.groupBox1 = new System.Windows.Forms.GroupBox();
          ((System.ComponentModel.ISupportInitialize)(this.ResultsGridView)).BeginInit();
          this.tabControl1.SuspendLayout();
          this.tabPage1.SuspendLayout();
          this.tabPage2.SuspendLayout();
-         this.menuStrip1.SuspendLayout();
+         this.panel2.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.holdingsDataGridView)).BeginInit();
          this.panel1.SuspendLayout();
-         this.panel2.SuspendLayout();
+         this.menuStrip1.SuspendLayout();
+         this.groupBox1.SuspendLayout();
          this.SuspendLayout();
          // 
          // StatusLabel
@@ -99,12 +103,12 @@
          this.ResultsGridView.AllowUserToDeleteRows = false;
          this.ResultsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
          this.ResultsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+         this.ResultsGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
          this.ResultsGridView.Location = new System.Drawing.Point(39, 6);
          this.ResultsGridView.Name = "ResultsGridView";
          this.ResultsGridView.ReadOnly = true;
          this.ResultsGridView.Size = new System.Drawing.Size(749, 232);
          this.ResultsGridView.TabIndex = 10;
-         this.ResultsGridView.Visible = false;
          // 
          // tabControl1
          // 
@@ -141,6 +145,63 @@
          this.tabPage2.TabIndex = 1;
          this.tabPage2.Text = "תיק וירטואלי";
          this.tabPage2.UseVisualStyleBackColor = true;
+         // 
+         // panel2
+         // 
+         this.panel2.Controls.Add(this.holdingsDataGridView);
+         this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+         this.panel2.Location = new System.Drawing.Point(3, 67);
+         this.panel2.Name = "panel2";
+         this.panel2.Size = new System.Drawing.Size(844, 190);
+         this.panel2.TabIndex = 6;
+         // 
+         // holdingsDataGridView
+         // 
+         this.holdingsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.holdingsDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.holdingsDataGridView.Location = new System.Drawing.Point(0, 0);
+         this.holdingsDataGridView.Name = "holdingsDataGridView";
+         this.holdingsDataGridView.Size = new System.Drawing.Size(844, 190);
+         this.holdingsDataGridView.TabIndex = 3;
+         // 
+         // panel1
+         // 
+         this.panel1.Controls.Add(this.cashLabel);
+         this.panel1.Controls.Add(this.label2);
+         this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+         this.panel1.Location = new System.Drawing.Point(3, 35);
+         this.panel1.Name = "panel1";
+         this.panel1.Size = new System.Drawing.Size(844, 32);
+         this.panel1.TabIndex = 5;
+         // 
+         // cashLabel
+         // 
+         this.cashLabel.AutoSize = true;
+         this.cashLabel.Dock = System.Windows.Forms.DockStyle.Right;
+         this.cashLabel.Location = new System.Drawing.Point(792, 0);
+         this.cashLabel.Name = "cashLabel";
+         this.cashLabel.Size = new System.Drawing.Size(13, 13);
+         this.cashLabel.TabIndex = 6;
+         this.cashLabel.Text = "0";
+         // 
+         // label2
+         // 
+         this.label2.AutoSize = true;
+         this.label2.Dock = System.Windows.Forms.DockStyle.Right;
+         this.label2.Location = new System.Drawing.Point(805, 0);
+         this.label2.Name = "label2";
+         this.label2.Size = new System.Drawing.Size(39, 13);
+         this.label2.TabIndex = 0;
+         this.label2.Text = "מזומן:";
+         // 
+         // label3
+         // 
+         this.label3.AutoSize = true;
+         this.label3.Location = new System.Drawing.Point(751, 143);
+         this.label3.Name = "label3";
+         this.label3.Size = new System.Drawing.Size(48, 13);
+         this.label3.TabIndex = 2;
+         this.label3.Text = "החזקות:";
          // 
          // menuStrip1
          // 
@@ -203,68 +264,48 @@
          this.label1.TabIndex = 14;
          this.label1.Text = "תיק השקעות:";
          // 
-         // label2
+         // buyBondButton
          // 
-         this.label2.AutoSize = true;
-         this.label2.Dock = System.Windows.Forms.DockStyle.Right;
-         this.label2.Location = new System.Drawing.Point(805, 0);
-         this.label2.Name = "label2";
-         this.label2.Size = new System.Drawing.Size(39, 13);
-         this.label2.TabIndex = 0;
-         this.label2.Text = "מזומן:";
+         this.buyBondButton.Dock = System.Windows.Forms.DockStyle.Top;
+         this.buyBondButton.Enabled = false;
+         this.buyBondButton.Location = new System.Drawing.Point(3, 16);
+         this.buyBondButton.Name = "buyBondButton";
+         this.buyBondButton.Size = new System.Drawing.Size(129, 23);
+         this.buyBondButton.TabIndex = 7;
+         this.buyBondButton.Text = "קנה אג\"ח";
+         this.buyBondButton.UseVisualStyleBackColor = true;
+         this.buyBondButton.Click += new System.EventHandler(this.buyBondButton_Click);
          // 
-         // label3
+         // sellBondButton
          // 
-         this.label3.AutoSize = true;
-         this.label3.Location = new System.Drawing.Point(751, 143);
-         this.label3.Name = "label3";
-         this.label3.Size = new System.Drawing.Size(48, 13);
-         this.label3.TabIndex = 2;
-         this.label3.Text = "החזקות:";
+         this.sellBondButton.Dock = System.Windows.Forms.DockStyle.Top;
+         this.sellBondButton.Enabled = false;
+         this.sellBondButton.Location = new System.Drawing.Point(3, 39);
+         this.sellBondButton.Name = "sellBondButton";
+         this.sellBondButton.Size = new System.Drawing.Size(129, 23);
+         this.sellBondButton.TabIndex = 8;
+         this.sellBondButton.Text = "מכור אג\"ח";
+         this.sellBondButton.UseVisualStyleBackColor = true;
+         this.sellBondButton.Click += new System.EventHandler(this.sellBondButton_Click);
          // 
-         // holdingsDataGridView
+         // groupBox1
          // 
-         this.holdingsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-         this.holdingsDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.holdingsDataGridView.Location = new System.Drawing.Point(0, 0);
-         this.holdingsDataGridView.Name = "holdingsDataGridView";
-         this.holdingsDataGridView.Size = new System.Drawing.Size(844, 190);
-         this.holdingsDataGridView.TabIndex = 3;
-         // 
-         // panel1
-         // 
-         this.panel1.Controls.Add(this.cashLabel);
-         this.panel1.Controls.Add(this.label2);
-         this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-         this.panel1.Location = new System.Drawing.Point(3, 35);
-         this.panel1.Name = "panel1";
-         this.panel1.Size = new System.Drawing.Size(844, 32);
-         this.panel1.TabIndex = 5;
-         // 
-         // cashLabel
-         // 
-         this.cashLabel.AutoSize = true;
-         this.cashLabel.Dock = System.Windows.Forms.DockStyle.Right;
-         this.cashLabel.Location = new System.Drawing.Point(792, 0);
-         this.cashLabel.Name = "cashLabel";
-         this.cashLabel.Size = new System.Drawing.Size(13, 13);
-         this.cashLabel.TabIndex = 6;
-         this.cashLabel.Text = "0";
-         // 
-         // panel2
-         // 
-         this.panel2.Controls.Add(this.holdingsDataGridView);
-         this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-         this.panel2.Location = new System.Drawing.Point(3, 67);
-         this.panel2.Name = "panel2";
-         this.panel2.Size = new System.Drawing.Size(844, 190);
-         this.panel2.TabIndex = 6;
+         this.groupBox1.Controls.Add(this.sellBondButton);
+         this.groupBox1.Controls.Add(this.buyBondButton);
+         this.groupBox1.Location = new System.Drawing.Point(487, 60);
+         this.groupBox1.Name = "groupBox1";
+         this.groupBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+         this.groupBox1.Size = new System.Drawing.Size(135, 68);
+         this.groupBox1.TabIndex = 15;
+         this.groupBox1.TabStop = false;
+         this.groupBox1.Text = "פעולות";
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(1029, 531);
+         this.Controls.Add(this.groupBox1);
          this.Controls.Add(this.label1);
          this.Controls.Add(this.portflioComboBox);
          this.Controls.Add(this.tabControl1);
@@ -276,19 +317,19 @@
          this.MainMenuStrip = this.menuStrip1;
          this.Name = "Form1";
          this.Text = "שמנדוזה המלצות";
-         this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
          this.Load += new System.EventHandler(this.Form1_Load);
          ((System.ComponentModel.ISupportInitialize)(this.ResultsGridView)).EndInit();
          this.tabControl1.ResumeLayout(false);
          this.tabPage1.ResumeLayout(false);
          this.tabPage2.ResumeLayout(false);
          this.tabPage2.PerformLayout();
-         this.menuStrip1.ResumeLayout(false);
-         this.menuStrip1.PerformLayout();
+         this.panel2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.holdingsDataGridView)).EndInit();
          this.panel1.ResumeLayout(false);
          this.panel1.PerformLayout();
-         this.panel2.ResumeLayout(false);
+         this.menuStrip1.ResumeLayout(false);
+         this.menuStrip1.PerformLayout();
+         this.groupBox1.ResumeLayout(false);
          this.ResumeLayout(false);
          this.PerformLayout();
 
@@ -316,6 +357,9 @@
       private System.Windows.Forms.Panel panel1;
       private System.Windows.Forms.Label cashLabel;
       private System.Windows.Forms.Panel panel2;
+      private System.Windows.Forms.Button sellBondButton;
+      private System.Windows.Forms.Button buyBondButton;
+      private System.Windows.Forms.GroupBox groupBox1;
    }
 }
 

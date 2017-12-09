@@ -69,7 +69,7 @@ namespace BackEnd
                     string[] FundData = DelimitedData.Split('\'');
                     string NumberOfFund = FundData[0];
                     string NameOfFund = FundData[2];
-                    FundsList.Add(new Fund(NameOfFund, Convert.ToInt32(NumberOfFund)));
+                    //FundsList.Add(new Fund(NameOfFund, Convert.ToInt32(NumberOfFund)));
                 }
             }
         }

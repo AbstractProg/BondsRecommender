@@ -31,16 +31,35 @@ namespace Bridge
          m_FundsExtractor.FindFunds();
       }
 
-      public void UpdateBonds_BRDG(List<string> qualitiesToDownload, double minMahamToDownload, double maxMahamToDownload)
+      //********************************
+      //*** bonds updater
+      //********************************
+      public void DownloadBonds_BRDG(List<string> qualitiesToDownload, List<GeneralTypes.IndexType> indexesToDownload, double minMahamToDownload, double maxMahamToDownload)
       {
-         m_BondsUpdater.UpdateBondsData(qualitiesToDownload, minMahamToDownload, maxMahamToDownload);
+         m_BondsUpdater.DownloadBondsData(qualitiesToDownload, indexesToDownload, minMahamToDownload, maxMahamToDownload);
       }
 
+      //********************************
+      //*** Bonds table manager
+      //********************************
       public void UpdateBondsFile_BRDG()
       {
          m_BondsTableMgr.UpdateDBFile();
       }
 
+      public List<GeneralTypes.Bond> GetListOfBonds_BRDG()
+      {
+         return m_BondsTableMgr.GetAllBonds();
+      }
+
+      public GeneralTypes.Bond GetBondByID(int bondID)
+      {
+         return m_BondsTableMgr.GetBond(bondID);
+      }
+
+      //********************************
+      //*** Portfolio manager
+      //********************************
       public List<string> GetPortfolioNames_BRDG()
       {
          return m_PortfoliosManager.GetPortfolioNames();
@@ -51,7 +70,7 @@ namespace Bridge
          return m_PortfoliosManager.GetPortfolioUninvestedMoney(portfolioName);
       }
 
-      public Dictionary<GeneralTypes.Bond, string> GetPortfolioHoldings_BRDG(string portfolioName)
+      public Dictionary<int, GeneralTypes.Position> GetPortfolioHoldings_BRDG(string portfolioName)
       {
          return m_PortfoliosManager.GetPortfolioHoldings(portfolioName);
       }
@@ -61,18 +80,42 @@ namespace Bridge
          m_PortfoliosManager.CreateNewPortfolio(portfolioName, initialMoney);
       }
 
+      public void BuyBondInPortfolio_BRDG(string portfolioName, int bondID, int amountToBuy, double comissionPercentage)
+      {
+         m_PortfoliosManager.BuyNewBond(portfolioName, bondID, amountToBuy, comissionPercentage);
+      }
+
+      public void SellBondInPortfolio_BRDG(string portfolioName, int bondID, double comissionPercentage)
+      {
+         m_PortfoliosManager.SellExistingBond(portfolioName, bondID, comissionPercentage);
+      }
+
+      //********************************
+      //*** Configuration manager
+      //********************************
       public List<string> QualityToDownload_BRDG => m_ConfigurationManager.QualityToDownload;
+      public List<GeneralTypes.IndexType> IndexesToDownload_BRDG => m_ConfigurationManager.IndexesToDownload;
       public double MinMahamToDownload_BRDG => m_ConfigurationManager.MinMahamToDownload;
       public double MaxMahamToDownload_BRDG => m_ConfigurationManager.MaxMahamToDownload;
       public List<string> QualityToDisplay_BRDG=> m_ConfigurationManager.QualityToDisplay;
+      public List<GeneralTypes.IndexType> IndexesToDisplay_BRDG => m_ConfigurationManager.IndexesToDisplay;
       public double MinMahamToDisplay_BRDG => m_ConfigurationManager.MinMahamToDisplay;
       public double MaxMahamToDisplay_BRDG => m_ConfigurationManager.MaxMahamToDisplay;
 
-      public void UpdateCfgFile_BRDG(List<string> qualityToDownload, double minMahamToDownload, double maxMahamToDownload,
-         List<string> qualityToDisplay, double minMahamToDisplay, double maxMahamToDisplay)
+      public void UpdateCfgFile_BRDG(List<string> qualityToDownload, List<GeneralTypes.IndexType> indexesToDownload, double minMahamToDownload,
+         double maxMahamToDownload, List<string> qualityToDisplay, List<GeneralTypes.IndexType> indexesToDisplay, double minMahamToDisplay,
+         double maxMahamToDisplay)
       {
-         m_ConfigurationManager.UpdateCfgFile(qualityToDownload, minMahamToDownload, maxMahamToDownload,
-            qualityToDisplay, minMahamToDisplay, maxMahamToDisplay);
+         m_ConfigurationManager.UpdateCfgFile(qualityToDownload, indexesToDownload, minMahamToDownload, maxMahamToDownload,
+            qualityToDisplay, indexesToDisplay, minMahamToDisplay, maxMahamToDisplay, m_ConfigurationManager.ComissionPercentage);
+      }
+      public double GetComissionPct_BRDG()
+      {
+         return m_ConfigurationManager.ComissionPercentage;
+      }
+      public void SetComissionPct_BRDG(double newComission)
+      {
+         m_ConfigurationManager.ComissionPercentage = newComission;
       }
    }
 }
