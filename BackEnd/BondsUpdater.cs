@@ -66,17 +66,11 @@ namespace BackEnd
 
          m_dDownloadStartedPublisher.LaunchEvent();
          string[] WebPageData = m_WebController.PerformPostRequest("http://www.bizportal.co.il/bonds/Search/SearchResults_AjaxBinding_Read", PostRequestParams);
-         string[] AllBondNumbersAsStrings = WebPageData[0].Split(new string[] { "ColumnData25" }, StringSplitOptions.None);
-         List<int> AllBondNumbers = new List<int>();
-         for (int i = 0; i < AllBondNumbersAsStrings.Length - 1; i++)
+         string[] AllBondsDataAsStrings = WebPageData[0].Split(new string[] { "ColumnData25" }, StringSplitOptions.None);
+         for (int i = 0; i < AllBondsDataAsStrings.Length - 1; i++)
          {
-            string bondName, bondQuality;
-            int bondSerialNum;
-            double maham, curValue;
-            GeneralTypes.IndexType index;
-
             //extract basic properties of the bond
-            ExtractBondBasicData(qualitiesToDownload, AllBondNumbersAsStrings[i], out bondName, out curValue, out bondSerialNum, out maham, out bondQuality, out index);
+            ExtractBondBasicData(qualitiesToDownload, AllBondsDataAsStrings[i], out string bondName, out double curValue, out int bondSerialNum, out double maham, out string bondQuality, out GeneralTypes.IndexType index);
 
             AllBonds.Add(new GeneralTypes.Bond(bondName, bondSerialNum, curValue, bondQuality, maham, index, 0, new DateTime()));
          }
@@ -185,9 +179,7 @@ namespace BackEnd
             {
                try
                {
-                  double bondNetYield;
-                  DateTime bondExDate;
-                  ExtractBondAdvancedData(curBond.SerialNumber, out bondNetYield, out bondExDate);
+                  ExtractBondAdvancedData(curBond.SerialNumber, out double bondNetYield, out DateTime bondExDate);
                   GeneralTypes.Bond newBond = new GeneralTypes.Bond(curBond, bondNetYield, bondExDate);
                   AllDownloadedBonds.Add(newBond);
                   m_BondsTableManager.UpdateBond(newBond);

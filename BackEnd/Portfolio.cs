@@ -87,14 +87,14 @@ namespace BackEnd
       private void AddBuyToHistory(int bondID, string bondName, double currentValue, int amountOfUnits)
       {
          StreamWriter historyFile = new StreamWriter(m_name + GeneralConsts.PORTFOLIO_HISTORY_FILE_EXTENSION, true);
-         historyFile.WriteLine("{0},{1},{2},{3}", bondID, bondName, currentValue, amountOfUnits);
+         historyFile.WriteLine("{0},{1},{2},{3},{4}", bondID, bondName, currentValue, amountOfUnits, DateTime.Today.ToString("yyyy/MM/dd"));
          historyFile.Close();
       }
 
       private void AddSellToHistory(int bondID, string bondName, double currentValue, int amountOfUnits)
       {
          StreamWriter historyFile = new StreamWriter(m_name + GeneralConsts.PORTFOLIO_HISTORY_FILE_EXTENSION, true);
-         historyFile.WriteLine("{0},{1},{2},{3}", bondID, bondName, -currentValue, amountOfUnits);
+         historyFile.WriteLine("{0},{1},{2},{3},{4}", bondID, bondName, -currentValue, amountOfUnits, DateTime.Today.ToString("yyyy/MM/dd"));
          historyFile.Close();
       }
    }

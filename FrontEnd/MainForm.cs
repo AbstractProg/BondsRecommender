@@ -39,6 +39,19 @@ namespace FrontEnd
          ResultsGridView.Columns[INDEX_COL].Name = "הצמדה";
          ResultsGridView.Columns[EXDATE_COL].Name = "תאריך אקס";
          ResultsGridView.Columns[NET_YIELD_COL].Name = "תשואה נטו";
+
+         qualityCheckBoxes = new Dictionary<string, CheckBox>() {
+            { "Aaa", AaaCheckBox}, { "Aa1", Aa1CheckBox}, { "Aa2", Aa2CheckBox}, { "Aa3", Aa3CheckBox}, { "A1", A1CheckBox}, { "A2", A2CheckBox},
+            { "A3", A3CheckBox}, { "Ba1", Ba1CheckBox}, { "Baa1", Baa1CheckBox}, { "Baa2", Baa2CheckBox}, { "Baa3", Baa3CheckBox}, { "AAA", AAACapCheckBox},
+            { "AA+", AAPlusCheckBox}, { "AA", AACheckBox}, { "AA-", AAMinusCheckBox}, { "A+", APlusCheckBox}, { "A", ACheckBox}, { "A-", AAMinusCheckBox},
+            { "BBB+", BBBPlusCheckBox}, { "BBB", BBBCheckBox}, { "BBB-", BBBMinusCheckBox}, { "CCC", CCCCheckBox}, { "CC", CCCheckBox}, { "D", DCheckBox}};
+
+         indexCheckBoxes = new Dictionary<GeneralTypes.IndexType, CheckBox>()
+         {
+            {GeneralTypes.IndexType.Dollar, DollarCheckBox }, { GeneralTypes.IndexType.Fixed, FixedInterestCheckBox},
+            { GeneralTypes.IndexType.Madad, MadadCheckBox}, { GeneralTypes.IndexType.Shekel, ShekelCheckBox},
+            { GeneralTypes.IndexType.VaryingInterest, VaryingInterestCheckBox}
+         };
       }
 
       /**********************************************************************/
@@ -53,23 +66,32 @@ namespace FrontEnd
       const int EXDATE_COL = 5;
       const int NET_YIELD_COL = 6;
 
+      Dictionary<string, CheckBox> qualityCheckBoxes;
+      Dictionary<GeneralTypes.IndexType, CheckBox> indexCheckBoxes;
+
       private void UpdateDisplayedBonds()
       {
          List<GeneralTypes.Bond> bondList = m_Bridge.GetListOfBonds_BRDG();
 
          ResultsGridView.Rows.Clear();
 
-         for(int i=0; i<bondList.Count; i++)
-         //foreach (GeneralTypes.Bond curBond in bondList)
+         //for(int i=0; i<bondList.Count; i++)
+         foreach(GeneralTypes.Bond curBond in bondList)
          {
-            ResultsGridView.Rows.Add();
-            ResultsGridView.Rows[i].Cells[NAME_COL].Value      = bondList[i].Name;
-            ResultsGridView.Rows[i].Cells[SERIAL_COL].Value    = bondList[i].SerialNumber;
-            ResultsGridView.Rows[i].Cells[QUALITY_COL].Value   = bondList[i].QualityRating;
-            ResultsGridView.Rows[i].Cells[MAHAM_COL].Value     = bondList[i].Maham;
-            ResultsGridView.Rows[i].Cells[INDEX_COL].Value     = GeneralTypes.IndexConverter.IndexToString(bondList[i].Index);
-            ResultsGridView.Rows[i].Cells[EXDATE_COL].Value    = bondList[i].ExDate.ToString("yyyy/MM/dd", null);
-            ResultsGridView.Rows[i].Cells[NET_YIELD_COL].Value = bondList[i].NetYield;
+            //GeneralTypes.Bond curBond = bondList[i];
+            if (qualityCheckBoxes[curBond.QualityRating].Checked &&
+               indexCheckBoxes[curBond.Index].Checked)
+            {
+               ResultsGridView.Rows.Add();
+               int Idx = ResultsGridView.Rows.Count - 1;
+               ResultsGridView.Rows[Idx].Cells[NAME_COL].Value = curBond.Name;
+               ResultsGridView.Rows[Idx].Cells[SERIAL_COL].Value = curBond.SerialNumber;
+               ResultsGridView.Rows[Idx].Cells[QUALITY_COL].Value = curBond.QualityRating;
+               ResultsGridView.Rows[Idx].Cells[MAHAM_COL].Value = curBond.Maham;
+               ResultsGridView.Rows[Idx].Cells[INDEX_COL].Value = GeneralTypes.IndexConverter.IndexToString(curBond.Index);
+               ResultsGridView.Rows[Idx].Cells[EXDATE_COL].Value = curBond.ExDate.ToString("yyyy/MM/dd", null);
+               ResultsGridView.Rows[Idx].Cells[NET_YIELD_COL].Value = curBond.NetYield;
+            }
          }
       }
 
@@ -100,7 +122,7 @@ namespace FrontEnd
       {
          ResultsGridView.Invoke((MethodInvoker)delegate
          {
-            UpdateBondsButton.Enabled = true;
+            updateBondsToolStripMenuItem.Enabled = true;
             downloadProgressBar.Visible = false;
             StatusLabel.Visible = false;
             curBondLabel.Visible = false;
@@ -120,7 +142,7 @@ namespace FrontEnd
 
       private void UpdateBondsButton_Click(object sender, EventArgs e)
       {
-         UpdateBondsButton.Enabled = false;
+         updateBondsToolStripMenuItem.Enabled = false;
          downloadProgressBar.Visible = true;
 
          m_Bridge.DownloadBonds_BRDG(m_Bridge.QualityToDownload_BRDG, m_Bridge.IndexesToDownload_BRDG, m_Bridge.MinMahamToDownload_BRDG, m_Bridge.MaxMahamToDownload_BRDG);
@@ -133,6 +155,15 @@ namespace FrontEnd
          portflioComboBox.Items.Add(OPEN_NEW_PORTFOLIO_STR);
 
          UpdateDisplayedBonds();
+
+         foreach(CheckBox cb in qualityCheckBoxes.Values)
+         {
+            cb.CheckedChanged += new EventHandler(FilterCheckBox_checkedChanged);
+         }
+         foreach (CheckBox cb in indexCheckBoxes.Values)
+         {
+            cb.CheckedChanged += new EventHandler(FilterCheckBox_checkedChanged);
+         }
       }
 
       private void DownloadSettingsStripMenuItem_Click(object sender, EventArgs e)
@@ -238,6 +269,19 @@ namespace FrontEnd
             m_Bridge.SetComissionPct_BRDG(sellBondDlg.Comission);
             DisplayPortfolio(portflioComboBox.Text);
          }
+      }
+
+      private void updateBondsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         updateBondsToolStripMenuItem.Enabled = false;
+         downloadProgressBar.Visible = true;
+
+         m_Bridge.DownloadBonds_BRDG(m_Bridge.QualityToDownload_BRDG, m_Bridge.IndexesToDownload_BRDG, m_Bridge.MinMahamToDownload_BRDG, m_Bridge.MaxMahamToDownload_BRDG);
+      }
+
+      private void FilterCheckBox_checkedChanged(object sender, EventArgs e)
+      {
+         UpdateDisplayedBonds();
       }
    }
 }

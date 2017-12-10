@@ -86,7 +86,6 @@
          // 
          // sellButton
          // 
-         this.sellButton.Enabled = false;
          this.sellButton.Location = new System.Drawing.Point(169, 282);
          this.sellButton.Name = "sellButton";
          this.sellButton.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
